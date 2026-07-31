@@ -1,0 +1,98 @@
+﻿"use client";
+
+import { useEffect, useState } from "react";
+import { site } from "../src/config/site";
+
+const asset = (name: string) => `/web-${name}.svg`;
+const whatsapp = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMessage)}`;
+const destination = site.address.line1 + ", " + site.address.line2;
+const mapsRoute = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=driving`;
+const wazeRoute = `https://waze.com/ul?q=${encodeURIComponent(destination)}&navigate=yes&utm_source=casa119`;
+const uberRoute = `https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[formatted_address]=${encodeURIComponent(destination)}`;
+
+const rooms = [
+  { id: "bar", label: "Bar", image: "5", kicker: "para brindar", title: "O bar que puxa a conversa.", copy: "Drinks autorais, clÃ¡ssicos e sem Ã¡lcool para comeÃ§ar a noite do jeito certo." },
+  { id: "casa", label: "A Casa", image: "3", kicker: "para ficar", title: "Uma casa para ocupar sem pressa.", copy: "PÃ¡tio, luz baixa, plantas, mÃºsica e aquele tipo de encontro que vira histÃ³ria." },
+  { id: "comidinhas", label: "Comidinhas", image: "4", kicker: "para dividir", title: "Comida no centro da mesa.", copy: "PorÃ§Ãµes, sandubas e sabores para acompanhar a mesa cheia e a conversa solta." },
+];
+const instagramPosts = [
+  { image: "som-para-ficar-mais-um-pouco", tag: "agenda", title: "O que vai acontecer na Casa", copy: "shows, DJs e encontros toda semana" },
+  { image: "o-bar-que-puxa-a-conversa", tag: "mÃºsica", title: "Som para ficar mais um pouco", copy: "do primeiro brinde ao Ãºltimo refrÃ£o" },
+  { image: "comida-que-chama-conversa", tag: "mesa", title: "Comida que chama conversa", copy: "feito para dividir sem cerimÃ´nia" },
+  { image: "a-casa-e-feita-de-gente", tag: "comunidade", title: "A casa Ã© feita de gente", copy: "chegue como vocÃª Ã©" },
+];
+
+function Arrow() { return <span aria-hidden="true">â†—</span>; }
+function Mark() { return <span className="wordmark" aria-label="Casa 119">CASA <b>119</b></span>; }
+
+export default function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [active, setActive] = useState("top");
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    const observer = new IntersectionObserver((entries) => entries.forEach((entry) => entry.isIntersecting && setActive(entry.target.id)), { rootMargin: "-45% 0px -45%" });
+    ["top", ...rooms.map((room) => room.id), "brunch", "info"].forEach((id) => { const element = document.getElementById(id); if (element) observer.observe(element); });
+    return () => { window.removeEventListener("scroll", onScroll); observer.disconnect(); };
+  }, []);
+
+  const go = (id: string) => { setMenuOpen(false); document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); };
+
+  return <>
+    <a className="skip-link" href="#conteudo">Pular para o conteÃºdo</a>
+    <header className={`site-header ${scrolled ? "is-scrolled" : ""}`}>
+      <button className="header-brand" onClick={() => go("top")} aria-label="Voltar ao inÃ­cio"><Mark /></button>
+      <nav className="desktop-nav" aria-label="NavegaÃ§Ã£o principal">
+        {rooms.map((room) => <button key={room.id} className={active === room.id ? "current" : ""} onClick={() => go(room.id)}>{room.label}</button>)}
+        <button className={active === "brunch" ? "current" : ""} onClick={() => go("brunch")}>Brunch</button>
+        <button className={active === "info" ? "current" : ""} onClick={() => go("info")}>Como chegar</button>
+      </nav>
+      <a className="header-cta" href={whatsapp} target="_blank" rel="noreferrer">Ver programaÃ§Ã£o <Arrow /></a>
+      <button className="menu-toggle" aria-expanded={menuOpen} aria-controls="mobile-menu" onClick={() => setMenuOpen(!menuOpen)}><span>{menuOpen ? "Fechar" : "Menu"}</span><i /></button>
+    </header>
+
+    <div id="mobile-menu" className={`mobile-menu ${menuOpen ? "open" : ""}`}>
+      <p>Casa 119 <span>Â· JundiaÃ­</span></p>
+      {rooms.map((room) => <button key={room.id} onClick={() => go(room.id)}>{room.label}<Arrow /></button>)}
+      <button onClick={() => go("brunch")}>Brunch<Arrow /></button>
+      <button onClick={() => go("info")}>Como chegar<Arrow /></button>
+      <a href={whatsapp} target="_blank" rel="noreferrer">Ver programaÃ§Ã£o <Arrow /></a>
+    </div>
+
+    <main id="conteudo">
+      <section id="top" className="hero" aria-labelledby="hero-title">
+        <div className="hero-panel">
+          <div className="hero-meta"><span>JundiaÃ­ Â· SP</span><span>Aberta para encontros</span></div>
+          <Mark />
+          <div className="hero-message"><p className="eyebrow">Cultura Â· comida Â· mÃºsica</p><h1 id="hero-title">Chega mais.<br /><i>A casa Ã© sua.</i></h1><p className="hero-copy">Um endereÃ§o vivo para comer bem, brindar sem pressa e encontrar o que vocÃª nem sabia que estava procurando.</p><div className="hero-actions"><button onClick={() => go("casa")}>ConheÃ§a a Casa <span>â†“</span></button><a href={whatsapp} target="_blank" rel="noreferrer">O que acontece hoje <Arrow /></a></div></div>
+          <p className="hero-footnote">Av. Dr. Olavo GuimarÃ£es, 119<br />Vila Arens â€” JundiaÃ­/SP</p>
+        </div>
+        <div className="hero-image"><img src="/hero-casa119-hq.svg" alt="PÃ¡tio aberto da Casa 119 com mesas, Ã¡rvores e cadeiras" fetchPriority="high" /><div className="image-note">um lugar<br /><strong>para ficar</strong></div><div className="vertical-label">CASA 119 Â· DESDE SEMPRE EM BOA COMPANHIA</div></div>
+      </section>
+
+      <section className="intro-band" aria-label="Manifesto"><p className="eyebrow">A Casa por dentro</p><h2>VocÃª nÃ£o vem sÃ³ para consumir.<br /><i>VocÃª vem para fazer parte.</i></h2><p className="intro-detail">A Casa 119 mistura gastronomia, arte, mÃºsica e gente em um espaÃ§o que muda conforme o dia. Ã‰ bar, pÃ¡tio, palco, mesa e ponto de encontro.</p></section>
+
+      <section className="room-index" aria-label="Explore a Casa">
+        <div className="section-head"><p className="eyebrow">Escolha seu cÃ´modo</p><p className="section-count">01 â€” 03</p></div>
+        <div className="room-grid">{rooms.map((room, index) => <button className={`room-card room-card-${index + 1}`} key={room.id} onClick={() => go(room.id)}><span className="room-number">0{index + 1}</span><img src={asset(room.image)} alt={room.label === "Bar" ? "Bar da Casa 119 com balcÃ£o vermelho e estantes de madeira" : room.label === "A Casa" ? "Entrada da Casa 119 com paredes de tijolo e plantas" : "PÃ¡tio ensolarado da Casa 119"} /><span className="room-card-text"><small>{room.kicker}</small><strong>{room.label}</strong><span>{room.copy}</span><em>Explorar <Arrow /></em></span></button>)}</div>
+      </section>
+
+      <section id="bar" className="feature feature-bar" aria-labelledby="bar-title"><div className="feature-image"><img src={asset("o-bar-que-puxa-a-conversa")} alt="BalcÃ£o do bar da Casa 119 com paredes vermelhas e marcenaria" /><span className="image-caption">Bar da Casa 119 Â· 05</span></div><div className="feature-content"><p className="eyebrow">01 Â· Para brindar</p><h2 id="bar-title">O bar que puxa<br /><i>a conversa.</i></h2><p>ClÃ¡ssicos, criaÃ§Ãµes autorais e opÃ§Ãµes sem Ã¡lcool. O bar acompanha o ritmo da Casa â€” do primeiro oi ao Ãºltimo brinde.</p><div className="feature-list"><span><b>01</b>Banzeiro</span><span><b>02</b>Paloma 119</span><span><b>03</b>Goiaba em Chamas</span><span><b>04</b>Spritz 119</span></div><p className="hours"><b>{site.hours.bar}</b><span>Consulte a carta no balcÃ£o</span></p><a className="text-link" href={site.menuUrl} onClick={(event) => site.menuUrl === "#" && event.preventDefault()}>Espiar a carta <Arrow /></a></div></section>
+
+      <section id="casa" className="feature feature-casa" aria-labelledby="casa-title"><div className="feature-content"><p className="eyebrow">02 Â· Para ficar</p><h2 id="casa-title">Uma casa para<br /><i>ocupar sem pressa.</i></h2><p>PÃ¡tio aberto, luz baixa, plantas, mÃºsica e uma arquitetura que convida a desacelerar. A melhor parte Ã© que cada visita encontra uma Casa diferente.</p><div className="quote">â€œChegue para conhecer.<br /><i>Fique pelo que acontece.</i>â€</div><a className="text-link" href={whatsapp} target="_blank" rel="noreferrer">Ver o que estÃ¡ rolando <Arrow /></a></div><div className="feature-image"><img src={asset("uma-casa-para-ocupar-sem-pressa")} alt="Corredor de entrada da Casa 119 com tijolos brancos, plantas e luminÃ¡rias" /><span className="image-caption">A entrada Â· 03</span></div></section>
+
+      <section id="comidinhas" className="food-section" aria-labelledby="food-title"><div className="food-heading"><p className="eyebrow">03 Â· Para dividir</p><h2 id="food-title">Comida no<br /><i>centro da mesa.</i></h2><p>PorÃ§Ãµes, sandubas e sabores para acompanhar a mesa cheia e a conversa solta.</p><a className="text-link" href={site.menuUrl} onClick={(event) => site.menuUrl === "#" && event.preventDefault()}>Conhecer as comidinhas <Arrow /></a></div><div className="food-image"><img src={asset("comida-que-chama-conversa")} alt="PÃ¡tio iluminado da Casa 119 pronto para receber encontros" /><span>feito para<br /><strong>compartilhar</strong></span></div><div className="food-notes"><div><small>Para comeÃ§ar</small><b>Chips da Casa</b><span>batatas Â· banana-da-terra</span></div><div><small>Para dividir</small><b>Cabra &amp; Caponata</b><span>bolinho Â· tomate Â· conforto</span></div><div><small>Para matar a fome</small><b>Brasa 119</b><span>sanduÃ­che Â· cupim Â· brasa</span></div></div></section>
+
+      <section id="brunch" className="brunch-section" aria-labelledby="brunch-title"><div className="brunch-image"><img src={asset("a-tarde-tem-outro-sabor")} alt="PÃ¡tio da Casa 119 durante o dia" /><span className="round-stamp">brunch<br /><b>15â€”18h</b></span></div><div className="brunch-copy"><p className="eyebrow">04 Â· Para desacelerar</p><h2 id="brunch-title">A tarde tem<br /><i>outro sabor.</i></h2><p>Um intervalo gostoso entre o dia e a noite: bruschettas, cafÃ©, conversa e a Casa banhada de sol.</p><p className="brunch-time"><b>{site.hours.brunch}</b><span>De quarta a domingo</span></p><a className="text-link" href={site.menuUrl} onClick={(event) => site.menuUrl === "#" && event.preventDefault()}>Ver o brunch <Arrow /></a></div></section>
+
+      <section className="instagram-section" aria-labelledby="instagram-title"><div className="instagram-head"><div><p className="eyebrow">Do feed para a Casa</p><h2 id="instagram-title">Sempre tem<br /><i>algo acontecendo.</i></h2></div><a className="text-link" href="https://instagram.com/119acasa" target="_blank" rel="noreferrer">Acompanhar no Instagram <Arrow /></a></div><div className="instagram-grid">{instagramPosts.map((post, index) => <a className={`post-card post-card-${index + 1}`} key={post.title} href="https://instagram.com/119acasa" target="_blank" rel="noreferrer"><img src={asset(post.image)} alt="" /><span className="post-wash" /><div className="post-copy"><small>{post.tag} Â· 119</small><strong>{post.title}</strong><span>{post.copy}</span></div><b className="post-index">0{index + 1}</b></a>)}</div></section>
+
+      <section id="info" className="info-section" aria-labelledby="info-title"><div className="info-heading"><p className="eyebrow">Antes de chegar</p><h2 id="info-title">A porta<br /><i>estÃ¡ aberta.</i></h2></div><div className="info-grid"><article><span>HorÃ¡rios</span><strong>15h â€” 22h</strong><p>Aberta todos os dias, exceto terÃ§a-feira.<br />Brunch das 15h Ã s 18h.</p></article><article><span>EndereÃ§o</span><strong>Av. Dr. Olavo<br />GuimarÃ£es, 119</strong><p>Vila Arens Â· JundiaÃ­/SP</p><a href={site.mapUrl} target="_blank" rel="noreferrer">Abrir no mapa <Arrow /></a></article><article><span>ProgramaÃ§Ã£o</span><strong>Tem novidade<br />toda semana.</strong><p>Eventos, noites temÃ¡ticas e encontros especiais.</p><a href={whatsapp} target="_blank" rel="noreferrer">Falar no WhatsApp <Arrow /></a></article></div><div className="map-card"><div className="map-copy"><p className="eyebrow">Como chegar</p><h3>Encontre a Casa<br /><i>sem perder o caminho.</i></h3><p>Av. Dr. Olavo GuimarÃ£es, 119<br />Vila Arens Â· JundiaÃ­/SP</p><div className="transport-actions"><a className="map-button" aria-label="Solicitar Uber para a Casa 119" href={uberRoute} target="_blank" rel="noopener noreferrer">Ir de Uber <Arrow /></a><a className="map-button" aria-label="Abrir rota para a Casa 119 no Waze" href={wazeRoute} target="_blank" rel="noopener noreferrer">Abrir no Waze <Arrow /></a><a className="map-button" aria-label="Abrir rota para a Casa 119 no Google Maps" href={mapsRoute} target="_blank" rel="noopener noreferrer">Abrir no Maps <Arrow /></a></div></div><iframe title="Mapa da Casa 119" src="https://www.google.com/maps?q=Av.+Dr.+Olavo+Guimar%C3%A3es,+119,+Jundia%C3%AD&output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade" /></div></section>
+    </main>
+
+    <footer className="site-footer"><div className="footer-top"><img src="/logo-casa119.svg" alt="Casa 119" /><p>Uma Casa feita de encontros.<br /><span>JundiaÃ­ Â· SP</span></p><a href="https://instagram.com/119acasa" target="_blank" rel="noreferrer">Instagram <Arrow /></a><a href={whatsapp} target="_blank" rel="noreferrer">WhatsApp <Arrow /></a></div><div className="footer-bottom"><small>Â© Casa 119 Â· Feito para viver sem pressa.</small><small>Casa 119</small></div></footer>
+  </>;
+}
+
