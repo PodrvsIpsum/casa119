@@ -77,7 +77,7 @@ export default function Home() {
 
     <main id="conteudo">
       <section id="top" className="hero" aria-labelledby="hero-title">
-        <div className="hero-panel">
+        <div className="hero-panel" onPointerMove={(event) => { const rect = event.currentTarget.getBoundingClientRect(); event.currentTarget.style.setProperty("--glow-x", `${event.clientX - rect.left}px`); event.currentTarget.style.setProperty("--glow-y", `${event.clientY - rect.top}px`); }} onPointerLeave={(event) => { event.currentTarget.style.removeProperty("--glow-x"); event.currentTarget.style.removeProperty("--glow-y"); }}>
           <div className="hero-meta"><span>Jundiaí · SP</span><span>Aberta para encontros</span></div>
           <Mark />
           <div className="hero-message"><p className="eyebrow">Cultura · comida · música</p><h1 id="hero-title">Chega mais.<br /><i>A casa é sua.</i></h1><p className="hero-copy">Um endereço vivo para comer bem, brindar sem pressa e encontrar o que você nem sabia que estava procurando.</p><div className="hero-actions"><a href="https://instagram.com/119acasa" target="_blank" rel="noopener noreferrer">Conheça a Casa <span>↗</span></a><a href="https://instagram.com/119acasa" target="_blank" rel="noopener noreferrer">O que está rolando <Arrow /></a></div></div>
