@@ -102,6 +102,9 @@ body{background-image:radial-gradient(rgba(23,58,41,.075) .7px,transparent .7px)
 .food-notes>div{grid-template-columns:1fr 1.4fr;align-items:baseline;gap:20px}
 .food-notes b{font-family:var(--sans);font-size:17px;line-height:1.1;letter-spacing:-.03em}
 .food-notes span{grid-column:2;font-size:11px;margin-top:-5px}
+.food-section,.food-section .eyebrow,.food-section>div>p:not(.eyebrow),.food-notes small,.food-notes span,.food-section h2,.food-notes b{color:var(--paper)}
+.food-section h2{text-shadow:0 1px 0 rgba(23,58,41,.12)}
+.food-notes>div{border-color:rgba(244,236,220,.62)}
 @media(max-width:760px){.food-heading{padding-top:54px}.food-heading:before{margin-bottom:22px}.food-notes>div{grid-template-columns:1fr 1.35fr}}
 .menu-sections span:hover b,.detail-list span:hover b,.feature-list span:hover b{color:var(--orange)}
 @media(max-width:760px){.menu-sections span,.detail-list span,.feature-list span,.food-notes>div{transition:none}.menu-sections span:hover,.detail-list span:hover,.feature-list span:hover,.food-notes>div:hover,.menu-sections span:has(+ small):hover + small{transform:none;background:transparent;padding-left:0;padding-right:0;border-radius:0}}
