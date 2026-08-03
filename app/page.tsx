@@ -45,6 +45,13 @@ export default function Home() {
   }, [panel]);
 
   useEffect(() => {
+    if (!panel) return;
+    const closeOnEscape = (event: KeyboardEvent) => event.key === "Escape" && setPanel(null);
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [panel]);
+
+  useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     window.addEventListener("scroll", onScroll, { passive: true });
     const observer = new IntersectionObserver((entries) => entries.forEach((entry) => entry.isIntersecting && setActive(entry.target.id)), { rootMargin: "-45% 0px -45%" });

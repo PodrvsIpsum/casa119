@@ -86,6 +86,7 @@ body{background-image:radial-gradient(rgba(23,58,41,.075) .7px,transparent .7px)
 @media(max-width:760px){.bar-menu .drink-item:hover{transform:none;background:transparent;box-shadow:none}}
 .menu-sections:not(.bar-menu)>div>span{border-radius:8px;padding:10px 12px;transition:transform .25s ease,background .25s ease,box-shadow .25s ease}
 .menu-sections:not(.bar-menu)>div>span:hover{transform:translateX(6px);background:rgba(223,255,79,.16);box-shadow:0 5px 14px rgba(23,58,41,.1)}
+.text-link:focus-visible,.detail-close:focus-visible,.room-card:focus-visible,.hero-actions a:focus-visible,.hero-actions button:focus-visible{outline:2px solid var(--acid);outline-offset:4px}
 /* Shared four-section design system */
 .feature,.food-section,.brunch-section{margin:clamp(20px,3vw,42px) clamp(18px,4vw,58px);border-radius:28px;overflow:hidden;box-shadow:0 18px 54px rgba(23,58,41,.14)}
 .feature-content,.food-heading,.brunch-copy{padding:clamp(58px,7vw,108px) clamp(28px,6vw,92px)}
