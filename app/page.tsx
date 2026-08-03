@@ -33,6 +33,11 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
+    document.body.style.overflow = panel ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [panel]);
+
+  useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     window.addEventListener("scroll", onScroll, { passive: true });
     const observer = new IntersectionObserver((entries) => entries.forEach((entry) => entry.isIntersecting && setActive(entry.target.id)), { rootMargin: "-45% 0px -45%" });
