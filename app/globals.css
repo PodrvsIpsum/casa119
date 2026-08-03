@@ -46,6 +46,7 @@ body{background-image:radial-gradient(rgba(23,58,41,.075) .7px,transparent .7px)
 
 /* Shared image language: soft rounded corners across the editorial/photo surfaces. */
 .hero-image,.room-card img,.feature-image,.food-image,.brunch-image,.post-card{border-radius:18px;overflow:hidden}
+.hero-image{border-radius:0!important}
 .room-card img{display:block}
 .hero-image,.feature-image,.food-image,.brunch-image{isolation:isolate}
 @media(max-width:760px){.hero-image,.room-card img,.feature-image,.food-image,.brunch-image,.post-card{border-radius:16px}}
