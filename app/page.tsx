@@ -4,6 +4,11 @@ import { useEffect, useState } from "react";
 import { site } from "../src/config/site";
 
 const asset = (name: string) => `/web-${name}.svg`;
+const roomAsset = (name: string) => ({
+  bar1: "/bar1.png",
+  entrada1: "/entrada1.png",
+  mesinhas2: "/mesinhas2.png",
+}[name] ?? asset(name));
 const whatsapp = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(site.whatsappMessage)}`;
 const destination = site.address.line1 + ", " + site.address.line2;
 const mapsRoute = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=driving`;
@@ -11,9 +16,9 @@ const wazeRoute = `https://waze.com/ul?q=${encodeURIComponent(destination)}&navi
 const uberRoute = `https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[formatted_address]=${encodeURIComponent(destination)}`;
 
 const rooms = [
-  { id: "bar", label: "Bar", image: "5", kicker: "para brindar", title: "O bar que puxa a conversa.", copy: "Drinks autorais, clássicos e sem álcool para começar a noite do jeito certo." },
-  { id: "casa", label: "A Casa", image: "3", kicker: "para ficar", title: "Uma casa para ocupar sem pressa.", copy: "Pátio, luz baixa, plantas, música e aquele tipo de encontro que vira história." },
-  { id: "comidinhas", label: "Comidinhas", image: "4", kicker: "para dividir", title: "Comida no centro da mesa.", copy: "Porções, sandubas e sabores para acompanhar a mesa cheia e a conversa solta." },
+  { id: "bar", label: "Bar", image: "bar1", kicker: "para brindar", title: "O bar que puxa a conversa.", copy: "Drinks autorais, clássicos e sem álcool para começar a noite do jeito certo." },
+  { id: "casa", label: "A Casa", image: "entrada1", kicker: "para ficar", title: "Uma casa para ocupar sem pressa.", copy: "Pátio, luz baixa, plantas, música e aquele tipo de encontro que vira história." },
+  { id: "comidinhas", label: "Comidinhas", image: "mesinhas2", kicker: "para dividir", title: "Comida no centro da mesa.", copy: "Porções, sandubas e sabores para acompanhar a mesa cheia e a conversa solta." },
 ];
 const instagramPosts = [
   { image: "som-para-ficar-mais-um-pouco", tag: "agenda", title: "O que vai acontecer na Casa", copy: "shows, DJs e encontros toda semana" },
@@ -83,7 +88,7 @@ export default function Home() {
 
       <section className="room-index" aria-label="Explore a Casa">
         <div className="section-head"><p className="eyebrow">Escolha seu cômodo</p><p className="section-count">01 — 03</p></div>
-        <div className="room-grid">{rooms.map((room, index) => <button className={`room-card room-card-${index + 1}`} key={room.id} onClick={() => go(room.id)}><span className="room-number">0{index + 1}</span><img src={asset(room.image)} alt={room.label === "Bar" ? "Bar da Casa 119 com balcão vermelho e estantes de madeira" : room.label === "A Casa" ? "Entrada da Casa 119 com paredes de tijolo e plantas" : "Pátio ensolarado da Casa 119"} /><span className="room-card-text"><small>{room.kicker}</small><strong>{room.label}</strong><span>{room.copy}</span><em>Explorar <Arrow /></em></span></button>)}</div>
+        <div className="room-grid">{rooms.map((room, index) => <button className={`room-card room-card-${index + 1}`} key={room.id} onClick={() => go(room.id)}><span className="room-number">0{index + 1}</span><img src={roomAsset(room.image)} alt={room.label === "Bar" ? "Bar da Casa 119 com balcão vermelho e estantes de madeira" : room.label === "A Casa" ? "Entrada da Casa 119 com paredes de tijolo e plantas" : "Pátio ensolarado da Casa 119"} /><span className="room-card-text"><small>{room.kicker}</small><strong>{room.label}</strong><span>{room.copy}</span><em>Explorar <Arrow /></em></span></button>)}</div>
       </section>
 
       <section id="bar" className="feature feature-bar" aria-labelledby="bar-title"><div className="feature-image"><img src={asset("o-bar-que-puxa-a-conversa")} alt="Balcão do bar da Casa 119 com paredes vermelhas e marcenaria" /><span className="image-caption">Bar da Casa 119 · 05</span></div><div className="feature-content"><p className="eyebrow">01 · Para brindar</p><h2 id="bar-title">O bar que puxa<br /><i>a conversa.</i></h2><p>Clássicos, criações autorais e opções sem álcool. O bar acompanha o ritmo da Casa — do primeiro oi ao último brinde.</p><div className="feature-list"><span><b>01</b>Banzeiro</span><span><b>02</b>Paloma 119</span><span><b>03</b>Goiaba em Chamas</span><span><b>04</b>Spritz 119</span></div><p className="hours"><b>{site.hours.bar}</b><span>Consulte a carta no balcão</span></p><a className="text-link" href={site.menuUrl} onClick={(event) => site.menuUrl === "#" && event.preventDefault()}>Espiar a carta <Arrow /></a></div></section>
